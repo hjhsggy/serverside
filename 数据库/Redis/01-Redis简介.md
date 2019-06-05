@@ -40,9 +40,9 @@ redis解压后就可以直接使用了（不像Nginx等Linux软件需要configur
 make                                        # 编译
 make test                                   # 如果提示需要tcl库，需要安装tcl
 make PREFIX=/usr/local/redis install        # 执行安装
-cd /usr/local/redis
-cp ~/redis-5.0.4/redis.conf ./            # 复制一份配置文件到redis下
+cp redis.conf /usr/local/redis/             # 复制一份配置文件到redis下
 ```
+
 
 #### 1.3 启动 
 

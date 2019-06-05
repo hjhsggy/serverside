@@ -1,15 +1,8 @@
 ## 一 Nginx介绍
 
-#### 1.1 常见Web服务器
-
-传统Web服务器：
-- Apache服务器：使用以进程为基础的结构，开支消耗很大，在多处理器环境中性能会有所下降，所以扩容Apache站点时常见的做法是增加服务器、扩充集群而不是增加处理器。 
-- Tomcat：专门用于Java的JSP和Servlet的轻量级服务器软件，无法满足复杂业务场景需求，但是由于自用资源帝，安装部署方便，也有一定的占有率。
-- Nginx最初是为了设计成为一个HTTP服务器，用来解决C10K问题（最初的服务器是基于进程/线程模型。新到来一个TCP连接，就需要分配一个进程。假如有C10K，就需要创建1W个进程，可想而知单机是无法承受的）。  
-
-#### 1.2 Nginx功能
-
 Nginx现在的功能十分强大，可以作为HTTP服务器，反向代理服务器，缓存加速访问，邮件服务器，支持FastCGI、SSL、Virtual Host、URL Rewrite、Gzip等常见功能，并支持第三方模块扩展。  
+
+Nginx在生产环境中，能够支持高达4万的并发连接数。这得与Nginx使用最新的epoll(Linux2.6内核)和kqueue(freebsd)网络I/O模型。而Apache使用的是传统的select模型，其Prefork模式为多进程模式，需要经常派生子进程，消耗CPU比Nginx高很多。  
 
 ## 二 Nginx安装
 
@@ -38,15 +31,11 @@ yum install openssl openssl-devel               # 如果使用了https，需要�
 # 下载
 wget https://nginx.org/download/nginx-1.14.2.tar.gz
 
-# 解压
+# 安装
 tar zxvf nginx-1.14.2.tar.gz
-cd /usr/local/nginx-1.14.2
-
-# 查看依赖，是否仍然有未安装的依赖
-./configure                                     # 此处可以选择添加安装可选项               
-           
-# 再次查看依赖，如果完毕，则编译Nginx
-make && make install                                                      
+cd nginx-1.14.2
+./configure                  # 此处可以选择添加安装可选项，默认 --prefix=/usr/local/nginx --sbin-path=<prefix>/sbin/nginx              make && make install  
+                                                    
 ```
 常用的./configure时可选参数：
 | 配置可选项 | 可选项说明 |
@@ -95,7 +84,7 @@ Nginx服务在运行时，会保持一个主进程和一个或多个工作进程
 ```
 # 启动
 cd /usr/local/nginx/sbin
-./nginx                                         # 需要关闭一些占用了80端口的应用
+./nginx               # 可以添加 -c /usr/local/nginx/conf/nginx.conf  参数指定启动配置，未指定则默认加载安装目录conf中的nginx.conf
 
 # 查看Nginx运行情况，如果服务器上配置了外网访问，此时可以在外网访问Nginx默认页面了
 ps aux|grep nginx                               # 此时可以看到Nginx拥有主进程和工作进程
