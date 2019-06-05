@@ -1,18 +1,3 @@
-## 前言
-
-推荐书籍地址：https://github.com/ruyuejun/polaris  
-
-所有知识笔记汇总仓库：https://github.com/overnote   
-
-各类技术分类索引：  
-- JavaScript：https://github.com/overnote/JavaScript
-- Go：https://github.com/overnote/Golang
-- Java：整理中
-- Python：整理中
-- Server:服务端相关技术，如数据库，web服务器等 https://github.com/overnote/Server
-- 算法：https://github.com/overnote/Algorithm
-
-
 ## 推荐书籍
 
 #### 网络
@@ -182,3 +167,17 @@ Docker与k8s
 
         《深入浅出Prometheus》
 ```
+
+## 附录：博主自己的其他笔记
+
+[推荐书籍](https://github.com/ruyuejun/polaris)：综合了所有技术对应的书籍与书评
+
+[知识笔记汇总仓库](https://github.com/overnote)：所有技术笔记所在组织  
+
+各类技术分类索引：
+- [算法](https://github.com/overnote/Algorithm)：涉及数据结构、基础算法、算法进阶等内容，有Go、JS两个版本，未来增加C，Java
+- [服务端](https://github.com/overnote/Server)：涉及服务端常用技术，如：nginx、mysql、redis等
+- [JavaScript](https://github.com/overnote/JavaScript)：涉及网页开发、JS学习、Node、vue、react等
+- [Go](https://github.com/overnote/Golang)：
+- [Java]()：整理中
+- [Python]()：整理中
