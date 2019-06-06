@@ -35,3 +35,37 @@ expires [time|epoch|max|off]          # time
 ```
 
 默认是关闭缓存的，即off，time值可以是正数、负数，epoch为1970年Jan1开始，max指定为2037年年底。值为-1表示永远过期。
+
+## 四 Nginx与Java的Tomcat配合
+
+静态文件可以交给nginx处理，而动态文件如.jso,.do可以由Nginx反向代理到Tomcat的服务器处理：
+
+```
+
+http {
+    ...
+
+    upstream tomcat {
+        server 127.0.0.1:8000;
+    }
+
+    server {
+        listen 80;
+        servername www.test.com;
+        index index.html index.jsp index.do default.jsp default.do;
+        root /data/www;
+        ...
+
+        location ~ \.(jsp|jspx|do)?$ {
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_pass http://tomcat;
+        }
+
+        ...
+    }
+
+    ...
+}
+
+```
