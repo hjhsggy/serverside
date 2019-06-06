@@ -79,52 +79,60 @@ sbin    命令目录
 
 ## 四 Nginx启动与关闭
 
-Nginx服务在运行时，会保持一个主进程和一个或多个工作进程，通过给Nginx服务的主进程发送信号就可以控制服务的启动停止了。
+Nginx服务在运行时，会保持一个主进程和一个或多个工作进程，通过给Nginx服务的主进程发送信号就可以控制服务的启动停止了。  
 
+
+启动：
 ```
-# 启动
 cd /usr/local/nginx/sbin
 ./nginx               # 可以添加 -c /usr/local/nginx/conf/nginx.conf  参数指定启动配置，未指定则默认加载安装目录conf中的nginx.conf
+```
 
-# 查看Nginx运行情况，如果服务器上配置了外网访问，此时可以在外网访问Nginx默认页面了
+查看Nginx运行情况：Nginx的主进程（master）不负责处理网络请求，负责生成和管理多个子进程，子进程（work）用于处理网络请求。
+```
 ps aux|grep nginx                               # 此时可以看到Nginx拥有主进程和工作进程
 cat /usr/local/nginx/logs/nginx.pid             # 该方法也可以查看nginx主进程
-
-注意：Nginx的主进程（master）不负责处理网络请求，负责生成和管理多个子进程，子进程（work）用于处理网络请求。
 
 # 如果出现80端口被占用的情况，解决办法
 netstat -antp                                   # 查看系统端口占用情况
 kill -9 (PID)
+```
 
-# 关闭Nginx
+关闭Nginx：关闭nginx的方式有很多种，一般使用发送系统信号给Nginx主进程的方式来停止
+```
 kill -INT PID                                   # 此处PID为Nginx的master进程PID
+kill -9 nginx                                   # 强制停止所有nginx进程
 ```
 
 ## 五 信号量
 
-在关闭Nginx时，我们使用了-INT，还有其他的信号量：
-```
-TERM或者INT     快速关闭
-QUIT            优雅的关闭进程（等请求结束后再关闭）
-HUP             重要！！！改变配置文件时用来，平滑的重读配置文件
-USR1            重读日志，在日志按月/日分割时使用
-USR2            平滑升级Nginx版本
-WINGCH          优雅关闭旧进程，配合USR2进行升级
-```
-由于Linux文件系统的特性，在Nginx的日志目录中，我们经常期望日志文件以日期命名，直接修改文件名，日志还是会往改名后的文件不停的录入。  
-正确的操作步骤如下：
-```
-# 修改日志文件文件名等
+#### 5.1 常用信号量
 
-# 重读日志
-kill -USR1 PID
+- TERM：快速关闭
+- INT：快速关闭
+- QUIT：优雅的关闭进程（等请求结束后再关闭）
+- HUP：重要！！！改变配置文件时用来，平滑的重读配置文件
+- USR1：重读日志，在日志按月/日分割时使用
+- USR2：平滑升级Nginx版本
+- WINGCH：优雅关闭旧进程，配合USR2进行升级
+
+#### 5.2 平滑重启
+
+在对nginx进行平滑重启前，可以先确认其配置文件nginx.conf的语法是否正确：
 ```
-注意：每次都需要查找nginx的进程pid，其实nginx的pid存储在logs/nginx.pid中，所以上述的命令可以修改为类似如下：
+nginx/sbin/nginx -t -c nginx.conf           # -t 就是用来检查语法是否正确的
 ```
-kill -HUP `cat logs/nginx.pid`
+
+执行平滑重启：
 ```
-注意：Nginx的命令虽然是以kill配合信号量来做，但是我们可以通过下面的命令查看Nginx真正的命令配置：
+kill -HUP pid   # pid其实也被nginx记录了下来，可以使用该命令：kill -HUP `cat logs/nginx.pid`
 ```
-./nginx -h             # 查看命令帮助
-./nginx -t             # 查看配置文件书写是否正确
-```
+
+#### 5.3 平滑升级
+
+- 步骤1：替换nginx文件为新版文件  
+- 步骤2：使用指令 `kill -USER2 pid`   
+- 步骤3：旧版的主进程将重命名.pid文件为.oldbin，然后执行新版的nginx可执行程序，依次启动新的主进程和新的工作进程。此时新旧实例会同时运行。  
+- 步骤4：从容关闭旧版 `kill -WINCH 旧版pid`，此时旧版工作进程会在处理所有连接后退出。  
+
+
