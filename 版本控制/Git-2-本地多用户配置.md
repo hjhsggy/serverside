@@ -8,10 +8,6 @@
 ssh-keygen -t rsa -C "user1@gmai.com" -f ~/.ssh/id_rsa_user1
 ssh-keygen -t rsa -C "user2@gmai.com" -f ~/.ssh/id_rsa_user2
 
-# 此时 ~/.ssh目录下存在2份秘钥文件
-ssh-add ~/.ssh/id_rsa_user1
-ssh-add ~/.ssh/id_rsa_user2
-
 # 新增 config文件
 cd ~/.ssh
 vim config
@@ -34,5 +30,8 @@ ssh-add ~/.ssh/id_rsa_user2
 # 将公钥配置进git远程仓库后，clone项目到本地，进入本地项目文件夹
 config --local user.name "user1"
 config --local user.email "user1@gmail.com"
+vim ./git/config                      # 修改项目目录下git配置的push用户
+url = git@github.com:***/***.git      # 将本句修改为git@user1:***/***.git
+
 # 此时该项目就会以user1身份进行维护
 ```
