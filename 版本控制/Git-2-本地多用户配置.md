@@ -27,7 +27,13 @@ IdentityFile ~/.ssh/id_rsa_user2
 ssh-add ~/.ssh/id_rsa_user1
 ssh-add ~/.ssh/id_rsa_user2
 
-# 将公钥配置进git远程仓库后，clone项目到本地，进入本地项目文件夹
+# 将公钥配置进git远程仓库后，即可进行推送，但是有两种情况：
+
+## 情况一：全新的项目，clone的地址应该修改
+git clone git@github.com:***/***.git        # 原有地址，应该以下列方式clone
+git clone git@user1::***/***..git
+
+## 情况二：已经存在的项目，进入项目目录：
 git config --local user.name "user1"
 git config --local user.email "user1@gmail.com"
 vim ./git/config                      # 修改项目目录下git配置的push用户
