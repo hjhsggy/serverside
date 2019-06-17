@@ -32,6 +32,9 @@ ssh-add ~/.ssh/id_rsa_user2
 ## 情况一：全新的项目，clone的地址应该修改
 git clone git@github.com:***/***.git        # 原有地址，应该以下列方式clone
 git clone git@user1::***/***..git
+# 进入项目后配置
+git config --local user.name "user1"
+git config --local user.email "user1@gmail.com"
 
 ## 情况二：已经存在的项目，进入项目目录：
 git config --local user.name "user1"
