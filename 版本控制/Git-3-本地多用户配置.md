@@ -39,20 +39,20 @@ IdentityFile ~/.ssh/id_rsa_user2
 User user1
 ```
 
-第六步：测试连接
+第六步：使用git clone 项目后，需要设置git用户与邮箱
 ```
-ssh -T user1@github.com
-ssh -T user2@github.com
-```
-
-实际操作中的问题：
-```
-# 使用git clone 项目后，push会出现问题，需要进入该项目根目录进行如下配置
+# 方式一：进入该项目根目录进行如下命令
 git config --local user.name "user1"
 git config --local user.email "user1@gmail.com"
 
-# 此时push后，项目将会以 "user1@gmail.com" 邮箱用户为准，当然也可以直接追加该项目目录 .git/config 文件
+# 方式二：进入该项目后找到 .git/config 文件，添加如下配置
 [user]
 	name = user1
 	email = user1@gmail.com
+```
+
+测试连接
+```
+ssh -T user1@github.com
+ssh -T user2@github.com
 ```
