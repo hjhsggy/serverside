@@ -11,8 +11,8 @@ git config --global --unset user.email
 
 第二步：添加多个用户
 ```
-ssh-keygen -t rsa -C -f id_rsa_user1 "user1@gmai.com" 
-ssh-keygen -t rsa -C -f id_rsa_user2 "user2@gmai.com" 
+ssh-keygen -t rsa -f ~/.ssh/id_rsa_user1 -C "user1@gmai.com" 
+ssh-keygen -t rsa -f ~/.ssh/id_rsa_user2 -C "user2@gmai.com" 
 ```
 
 第三步：信任添加的用户
